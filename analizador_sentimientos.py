@@ -18,3 +18,29 @@ def generate_summary(text):
     prompt = "Resume en una sola oración: {text}"
     response = llm.invoke(prompt)
     return response.content
+
+#analisis de sentimientos en formato JSON
+def analyze_sentiment(text):
+    """Analiza el sentimiento y devuelve el resultado estructurado"""
+    prompt = f"""Analiza el sentimiento del siguiente texto.
+    Responde unicamente en formato JSON valido:
+    {{"sentimiento": "positivo|negativo|neutro", "razon" : "justificacion breve"}}
+
+    Texto: {text}"""
+
+    response = llm.invoke(prompt)
+    try:
+        return json.loads(response.content)
+    except json.JSONDecodeError:
+        return {"sentimiento": "neutro", "razon": "Error de analisis"}
+    
+#Combinacion de resulados 
+def merge_results(data):
+    """combina los resultados de ambas ramas en un formato unificado"""
+    return {
+        "resumen": data["resumen"],
+        "sentimiento": data["sentimiento_data"]["sentimiento"],
+        "razon" : data["sentimiento_data"]["razon"]
+
+ }
+    
