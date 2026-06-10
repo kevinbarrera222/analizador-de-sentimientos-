@@ -1,4 +1,4 @@
-from langchain_core.runnables import RunnableLambda
+from langchain_core.runnables import RunnableLambda, RunnableParallel
 from langchain_openai import ChatOpenAI
 import json
 
@@ -19,6 +19,8 @@ def generate_summary(text):
     response = llm.invoke(prompt)
     return response.content
 
+summary_branch = RunnableLambda(generate_summary)
+
 #analisis de sentimientos en formato JSON
 def analyze_sentiment(text):
     """Analiza el sentimiento y devuelve el resultado estructurado"""
@@ -34,6 +36,9 @@ def analyze_sentiment(text):
     except json.JSONDecodeError:
         return {"sentimiento": "neutro", "razon": "Error de analisis"}
     
+
+sentiment_branch = RunnableLambda(analyze_sentiment)
+    
 #Combinacion de resulados 
 def merge_results(data):
     """combina los resultados de ambas ramas en un formato unificado"""
@@ -43,4 +48,22 @@ def merge_results(data):
         "razon" : data["sentimiento_data"]["razon"]
 
  }
-    
+
+merger = RunnableLambda(merge_results)
+
+
+parallel_analysis = RunnableParallel({
+    "resumen": summary_branch,
+    "sentimiento_data": sentiment_branch
+})
+
+#cadena completa 
+chain = preprocessor | parallel_analysis | merger 
+
+review_batch = [
+    "este producto es muy malo. no me ha gustado nada."
+    "terrible calidad, no lo recomiendo"
+    "esta bien, cumple su funcion"
+]
+
+resultado_batch = chain.batch
