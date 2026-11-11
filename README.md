@@ -5,6 +5,10 @@ El sistema genera un **resumen** del texto y un **análisis de sentimiento**, ej
 
 Incluye una **app web con Streamlit** para pegar reseñas o subir un CSV y ver los resultados con gráficos.
 
+### 👉 [Probar la app en vivo](https://6m7qgrjybryd3djzfw7qym.streamlit.app/)
+
+[![Abrir en Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://6m7qgrjybryd3djzfw7qym.streamlit.app/)
+
 ![App del analizador de sentimientos](docs/captura.png)
 
 ---
