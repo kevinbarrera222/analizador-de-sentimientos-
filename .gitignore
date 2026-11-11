@@ -1,4 +1,5 @@
-# Secretos
+# Secretos: NUNCA subir la API Key
+.streamlit/secrets.toml
 .env
 
 # Python
